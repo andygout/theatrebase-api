@@ -1,8 +1,8 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 
-import app from '../../src/app';
-import { purgeDatabase } from '../test-helpers/neo4j';
+import app from '../../src/app.js';
+import { purgeDatabase } from '../test-helpers/neo4j/index.js';
 
 chai.use(chaiHttp);
 

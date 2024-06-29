@@ -1,8 +1,8 @@
-import { isValidDate } from '../lib/is-valid-date';
-import { getTrimmedOrEmptyString } from '../lib/strings';
-import Base from './Base';
-import { Company, Person } from '.';
-import { MODELS } from '../utils/constants';
+import { isValidDate } from '../lib/is-valid-date.js';
+import { getTrimmedOrEmptyString } from '../lib/strings.js';
+import Base from './Base.js';
+import { Company, Person } from './index.js';
+import { MODELS } from '../utils/constants.js';
 
 export default class Review extends Base {
 

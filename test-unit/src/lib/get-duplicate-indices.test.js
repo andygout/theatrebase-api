@@ -8,8 +8,8 @@ import {
 	getDuplicateUuidIndices,
 	getDuplicateRoleIndices,
 	getDuplicateUrlIndices
-} from '../../../src/lib/get-duplicate-indices';
-import applyModelGetter from '../../test-helpers/apply-model-getter';
+} from '../../../src/lib/get-duplicate-indices.js';
+import applyModelGetter from '../../test-helpers/apply-model-getter.js';
 
 describe('Get Duplicate Indices module', () => {
 

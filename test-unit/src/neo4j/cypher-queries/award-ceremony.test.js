@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import * as cypherQueriesAwardCeremonies from '../../../../src/neo4j/cypher-queries/award-ceremony';
-import removeExcessWhitespace from '../../../test-helpers/remove-excess-whitespace';
+import * as cypherQueriesAwardCeremonies from '../../../../src/neo4j/cypher-queries/award-ceremony/index.js';
+import removeExcessWhitespace from '../../../test-helpers/remove-excess-whitespace.js';
 
 describe('Cypher Queries Award Ceremony module', () => {
 

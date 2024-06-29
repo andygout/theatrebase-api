@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import proxyquire from 'proxyquire';
+import esmock from 'esmock';
 import { assert, createStubInstance, spy, stub } from 'sinon';
 
-import { SubVenue } from '../../../src/models';
+import { SubVenue } from '../../../src/models/index.js';
 
 describe('Venue model', () => {
 
@@ -29,14 +29,14 @@ describe('Venue model', () => {
 
 	const createSubject = () =>
 
-		proxyquire('../../../src/models/Venue', {
-			'../lib/get-duplicate-indices': stubs.getDuplicateIndicesModule,
-			'.': stubs.models
-		}).default;
+		esmock('../../../src/models/Venue.js', {
+			'../../../src/lib/get-duplicate-indices.js': stubs.getDuplicateIndicesModule,
+			'../../../src/models/index.js': stubs.models
+		});
 
-	const createInstance = props => {
+	const createInstance = async props => {
 
-		const Venue = createSubject();
+		const Venue = await createSubject();
 
 		return new Venue(props);
 
@@ -46,14 +46,14 @@ describe('Venue model', () => {
 
 		describe('subVenues property', () => {
 
-			it('assigns empty array if absent from props', () => {
+			it('assigns empty array if absent from props', async () => {
 
-				const instance = createInstance({ name: 'National Theatre' });
+				const instance = await createInstance({ name: 'National Theatre' });
 				expect(instance.subVenues).to.deep.equal([]);
 
 			});
 
-			it('assigns array of subVenues if included in props, retaining those with empty or whitespace-only string names', () => {
+			it('assigns array of subVenues if included in props, retaining those with empty or whitespace-only string names', async () => {
 
 				const props = {
 					name: 'National Theatre',
@@ -69,7 +69,7 @@ describe('Venue model', () => {
 						}
 					]
 				};
-				const instance = createInstance(props);
+				const instance = await createInstance(props);
 				expect(instance.subVenues.length).to.equal(3);
 				expect(instance.subVenues[0] instanceof SubVenue).to.be.true;
 				expect(instance.subVenues[1] instanceof SubVenue).to.be.true;
@@ -83,7 +83,7 @@ describe('Venue model', () => {
 
 	describe('runInputValidations method', () => {
 
-		it('calls instance\'s validate methods and associated models\' validate methods', () => {
+		it('calls instance\'s validate methods and associated models\' validate methods', async () => {
 
 			const props = {
 				name: 'National Theatre',
@@ -95,7 +95,7 @@ describe('Venue model', () => {
 					}
 				]
 			};
-			const instance = createInstance(props);
+			const instance = await createInstance(props);
 			spy(instance, 'validateName');
 			spy(instance, 'validateDifferentiator');
 			instance.runInputValidations();
@@ -142,7 +142,7 @@ describe('Venue model', () => {
 					}
 				]
 			};
-			const instance = createInstance(props);
+			const instance = await createInstance(props);
 			stub(instance, 'validateUniquenessInDatabase');
 			await instance.runDatabaseValidations();
 			assert.calledOnceWithExactly(instance.validateUniquenessInDatabase);

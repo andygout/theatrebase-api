@@ -1,7 +1,7 @@
-import { hasErrors } from '../lib/has-errors';
-import { prepareAsParams } from '../lib/prepare-as-params';
-import { getTrimmedOrEmptyString } from '../lib/strings';
-import Base from './Base';
+import { hasErrors } from '../lib/has-errors.js';
+import { prepareAsParams } from '../lib/prepare-as-params.js';
+import { getTrimmedOrEmptyString } from '../lib/strings.js';
+import Base from './Base.js';
 import {
 	getCreateQueries,
 	getEditQueries,
@@ -10,9 +10,9 @@ import {
 	getListQueries,
 	sharedQueries,
 	validationQueries
-} from '../neo4j/cypher-queries';
-import { neo4jQuery } from '../neo4j/query';
-import { MODELS } from '../utils/constants';
+} from '../neo4j/cypher-queries/index.js';
+import { neo4jQuery } from '../neo4j/query.js';
+import { MODELS } from '../utils/constants.js';
 
 const DIFFERENTIATOR_EXEMPT_MODELS = new Set([
 	MODELS.AWARD_CEREMONY,

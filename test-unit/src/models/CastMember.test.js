@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import proxyquire from 'proxyquire';
+import esmock from 'esmock';
 import { assert, createStubInstance, spy, stub } from 'sinon';
 
-import { Role } from '../../../src/models';
+import { Role } from '../../../src/models/index.js';
 
 describe('CastMember model', () => {
 
@@ -28,14 +28,14 @@ describe('CastMember model', () => {
 	});
 
 	const createSubject = () =>
-		proxyquire('../../../src/models/CastMember', {
-			'../lib/get-duplicate-indices': stubs.getDuplicateIndicesModule,
-			'.': stubs.models
-		}).default;
+		esmock('../../../src/models/CastMember.js', {
+			'../../../src/lib/get-duplicate-indices.js': stubs.getDuplicateIndicesModule,
+			'../../../src/models/index.js': stubs.models
+		});
 
-	const createInstance = props => {
+	const createInstance = async props => {
 
-		const CastMember = createSubject();
+		const CastMember = await createSubject();
 
 		return new CastMember(props);
 
@@ -45,14 +45,14 @@ describe('CastMember model', () => {
 
 		describe('roles property', () => {
 
-			it('assigns empty array if absent from props', () => {
+			it('assigns empty array if absent from props', async () => {
 
-				const instance = createInstance({ name: 'Ian McKellen' });
+				const instance = await createInstance({ name: 'Ian McKellen' });
 				expect(instance.roles).to.deep.equal([]);
 
 			});
 
-			it('assigns array of role instances, retaining those with empty or whitespace-only string names', () => {
+			it('assigns array of role instances, retaining those with empty or whitespace-only string names', async () => {
 
 				const props = {
 					name: 'Ian McKellen',
@@ -68,7 +68,7 @@ describe('CastMember model', () => {
 						}
 					]
 				};
-				const instance = createInstance(props);
+				const instance = await createInstance(props);
 				expect(instance.roles.length).to.equal(3);
 				expect(instance.roles[0] instanceof Role).to.be.true;
 				expect(instance.roles[1] instanceof Role).to.be.true;
@@ -82,7 +82,7 @@ describe('CastMember model', () => {
 
 	describe('runInputValidations method', () => {
 
-		it('calls instance\'s validate methods and associated models\' validate methods', () => {
+		it('calls instance\'s validate methods and associated models\' validate methods', async () => {
 
 			const props = {
 				name: 'Ian McKellen',
@@ -92,7 +92,7 @@ describe('CastMember model', () => {
 					}
 				]
 			};
-			const instance = createInstance(props);
+			const instance = await createInstance(props);
 			spy(instance, 'validateName');
 			spy(instance, 'validateDifferentiator');
 			spy(instance, 'validateUniquenessInGroup');

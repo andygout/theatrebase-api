@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { isValidYear } from '../../../src/lib/is-valid-year';
+import { isValidYear } from '../../../src/lib/is-valid-year.js';
 
 describe('Is Valid Year module', () => {
 

@@ -3,10 +3,10 @@ import {
 	getDuplicateNameIndices,
 	getDuplicateUuidIndices,
 	getDuplicateUrlIndices
-} from '../lib/get-duplicate-indices';
-import { isValidDate } from '../lib/is-valid-date';
-import { getTrimmedOrEmptyString } from '../lib/strings';
-import Entity from './Entity';
+} from '../lib/get-duplicate-indices.js';
+import { isValidDate } from '../lib/is-valid-date.js';
+import { getTrimmedOrEmptyString } from '../lib/strings.js';
+import Entity from './Entity.js';
 import {
 	CastMember,
 	CreativeCredit,
@@ -18,8 +18,8 @@ import {
 	Season,
 	SubProductionIdentifier,
 	VenueBase
-} from '.';
-import { MODELS } from '../utils/constants';
+} from './index.js';
+import { MODELS } from '../utils/constants.js';
 
 export default class Production extends Entity {
 

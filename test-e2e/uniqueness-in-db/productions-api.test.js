@@ -2,8 +2,8 @@ import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import { createSandbox } from 'sinon';
 
-import app from '../../src/app';
-import { countNodesWithLabel, createNode, purgeDatabase } from '../test-helpers/neo4j';
+import app from '../../src/app.js';
+import { countNodesWithLabel, createNode, purgeDatabase } from '../test-helpers/neo4j/index.js';
 
 chai.use(chaiHttp);
 

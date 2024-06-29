@@ -1,6 +1,6 @@
-import ProductionIdentifier from './ProductionIdentifier';
-import { validationQueries } from '../neo4j/cypher-queries';
-import { neo4jQuery } from '../neo4j/query';
+import ProductionIdentifier from './ProductionIdentifier.js';
+import { validationQueries } from '../neo4j/cypher-queries/index.js';
+import { neo4jQuery } from '../neo4j/query.js';
 
 export default class SubProductionIdentifier extends ProductionIdentifier {
 

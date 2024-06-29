@@ -1,6 +1,7 @@
 {
   "name": "dramatis-api",
   "version": "0.0.0",
+  "type": "module",
   "description": "Graph database-driven API for site of theatrical productions, materials, and associated data.",
   "author": "https://github.com/andygout",
   "license": "MS-RSL",
@@ -15,10 +16,8 @@
     "e2e-test": "mocha --config test-e2e/.mocharc.json",
     "seed-db": "node db-seeding/seed-db",
     "transfer-env-dev": "node transfer-env-dev",
-    "build": "webpack",
-    "watch": "webpack --watch",
-    "setup": "node --require source-map-support/register built/setup.js",
-    "start": "npm run setup && npm run watch & node --watch --require source-map-support/register built/app.js"
+    "setup": "node --require source-map-support/register src/setup.js",
+    "start": "npm run setup && node --watch-path=src --require source-map-support/register src/app.js"
   },
   "pre-commit": [
     "lint-check",
@@ -42,24 +41,17 @@
     "source-map-support": "0.5.21"
   },
   "devDependencies": {
-    "@babel/core": "7.24.6",
-    "@babel/preset-env": "7.24.6",
-    "@babel/register": "7.24.6",
-    "babel-loader": "9.1.3",
     "chai": "4.4.1",
     "chai-http": "4.4.0",
     "eslint": "8.57.0",
     "eslint-plugin-mocha": "^10.4.3",
     "eslint-plugin-no-only-tests": "3.1.0",
+    "esmock": "^2.6.6",
     "jsonlint": "1.6.3",
     "lintspaces-cli": "0.8.0",
     "mocha": "10.4.0",
     "node-mocks-http": "1.14.0",
     "pre-commit": "1.2.2",
-    "proxyquire": "2.1.3",
-    "sinon": "18.0.0",
-    "webpack": "5.91.0",
-    "webpack-cli": "5.1.4",
-    "webpack-node-externals": "3.0.0"
+    "sinon": "18.0.0"
   }
 }

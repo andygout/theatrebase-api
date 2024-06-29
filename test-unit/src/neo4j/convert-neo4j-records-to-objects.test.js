@@ -1,26 +1,27 @@
 import { expect } from 'chai';
-import { createSandbox } from 'sinon';
-
-import * as convertNeo4jIntegersToNumbersModule from '../../../src/neo4j/convert-neo4j-integers-to-numbers';
-import { convertNeo4jRecordsToObjects } from '../../../src/neo4j/convert-neo4j-records-to-objects';
-
-const sandbox = createSandbox();
+import esmock from 'esmock';
+import { stub } from 'sinon';
 
 describe('Convert Neo4j Records To Objects module', () => {
 
+	let stubs;
+
 	beforeEach(() => {
 
-		sandbox.stub(convertNeo4jIntegersToNumbersModule, 'convertNeo4jIntegersToNumbers').returnsArg(0);
+		stubs = {
+			convertNeo4jIntegersToNumbersModule: {
+				convertNeo4jIntegersToNumbers: stub().returnsArg(0)
+			}
+		};
 
 	});
 
-	afterEach(() => {
+	const createSubject = () =>
+		esmock('../../../src/neo4j/convert-neo4j-records-to-objects.js', {
+			'../../../src/neo4j/convert-neo4j-integers-to-numbers.js': stubs.convertNeo4jIntegersToNumbersModule
+		});
 
-		sandbox.restore();
-
-	});
-
-	it('returns false if no error values present', () => {
+	it('returns false if no error values present', async () => {
 
 		const neo4Response = {
 			records: [
@@ -77,6 +78,7 @@ describe('Convert Neo4j Records To Objects module', () => {
 			}
 		];
 
+		const { convertNeo4jRecordsToObjects } = await createSubject();
 		const result = convertNeo4jRecordsToObjects(neo4Response);
 
 		expect(result).to.deep.equal(expectedResult);

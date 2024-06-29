@@ -1,10 +1,10 @@
-import { getDuplicateBaseInstanceIndices } from '../lib/get-duplicate-indices';
-import { prepareAsParams } from '../lib/prepare-as-params';
-import Entity from './Entity';
-import { Award, AwardCeremonyCategory } from '.';
-import { validationQueries } from '../neo4j/cypher-queries';
-import { neo4jQuery } from '../neo4j/query';
-import { MODELS } from '../utils/constants';
+import { getDuplicateBaseInstanceIndices } from '../lib/get-duplicate-indices.js';
+import { prepareAsParams } from '../lib/prepare-as-params.js';
+import Entity from './Entity.js';
+import { Award, AwardCeremonyCategory } from './index.js';
+import { validationQueries } from '../neo4j/cypher-queries/index.js';
+import { neo4jQuery } from '../neo4j/query.js';
+import { MODELS } from '../utils/constants.js';
 
 export default class AwardCeremony extends Entity {
 

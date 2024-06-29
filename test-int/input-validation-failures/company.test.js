@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { createSandbox } from 'sinon';
 
-import Company from '../../src/models/Company';
-import * as neo4jQueryModule from '../../src/neo4j/query';
+import Company from '../../src/models/Company.js';
+import * as neo4jQueryModule from '../../src/neo4j/query.js';
 
 const STRING_MAX_LENGTH = 1000;
 const ABOVE_MAX_LENGTH_STRING = 'a'.repeat(STRING_MAX_LENGTH + 1);

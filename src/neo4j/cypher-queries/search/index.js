@@ -1,4 +1,4 @@
-import getSearchQuery from './search';
+import getSearchQuery from './search.js';
 
 export {
 	getSearchQuery

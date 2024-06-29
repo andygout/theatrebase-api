@@ -1,6 +1,6 @@
 import { assert, spy, stub } from 'sinon';
 
-import { NominatedProductionIdentifier } from '../../../src/models';
+import { NominatedProductionIdentifier } from '../../../src/models/index.js';
 
 describe('NominatedProductionIdentifier model', () => {
 

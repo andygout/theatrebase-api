@@ -1,5 +1,5 @@
-import getShowQuery from './show';
-import getShowProductionsQuery from './show-productions';
+import getShowQuery from './show.js';
+import getShowProductionsQuery from './show-productions.js';
 
 export default () => [
 	getShowQuery(),

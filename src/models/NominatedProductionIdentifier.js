@@ -1,5 +1,5 @@
-import ProductionIdentifier from './ProductionIdentifier';
-import { MODELS } from '../utils/constants';
+import ProductionIdentifier from './ProductionIdentifier.js';
+import { MODELS } from '../utils/constants.js';
 
 export default class NominatedProductionIdentifier extends ProductionIdentifier {
 

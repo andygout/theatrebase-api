@@ -1,5 +1,5 @@
-import ProductionTeamCredit from './ProductionTeamCredit';
-import { MODELS } from '../utils/constants';
+import ProductionTeamCredit from './ProductionTeamCredit.js';
+import { MODELS } from '../utils/constants.js';
 
 export default class CrewCredit extends ProductionTeamCredit {
 

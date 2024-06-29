@@ -1,6 +1,6 @@
-import { getDuplicateBaseInstanceIndices } from '../lib/get-duplicate-indices';
-import VenueBase from './VenueBase';
-import { SubVenue } from '.';
+import { getDuplicateBaseInstanceIndices } from '../lib/get-duplicate-indices.js';
+import VenueBase from './VenueBase.js';
+import { SubVenue } from './index.js';
 
 export default class Venue extends VenueBase {
 

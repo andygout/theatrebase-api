@@ -1,9 +1,9 @@
 import { assert, createSandbox, spy } from 'sinon';
 
-import * as prepareAsParamsModule from '../../../src/lib/prepare-as-params';
-import { SourceMaterial } from '../../../src/models';
-import * as cypherQueries from '../../../src/neo4j/cypher-queries';
-import * as neo4jQueryModule from '../../../src/neo4j/query';
+import * as prepareAsParamsModule from '../../../src/lib/prepare-as-params.js';
+import { SourceMaterial } from '../../../src/models/index.js';
+import * as cypherQueries from '../../../src/neo4j/cypher-queries/index.js';
+import * as neo4jQueryModule from '../../../src/neo4j/query.js';
 
 let stubs;
 let instance;

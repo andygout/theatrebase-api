@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import proxyquire from 'proxyquire';
+import esmock from 'esmock';
 import { assert, createStubInstance, stub } from 'sinon';
 
-import { Production } from '../../../src/models';
+import { Production } from '../../../src/models/index.js';
 
 describe('Productions controller', () => {
 
@@ -35,15 +35,15 @@ describe('Productions controller', () => {
 	});
 
 	const createSubject = () =>
-		proxyquire('../../../src/controllers/productions', {
-			'../lib/call-class-methods': stubs.callClassMethodsModule,
-			'../lib/send-json-response': stubs.sendJsonResponseModule,
-			'../models': stubs.models
+		esmock('../../../src/controllers/productions.js', {
+			'../../../src/lib/call-class-methods.js': stubs.callClassMethodsModule,
+			'../../../src/lib/send-json-response.js': stubs.sendJsonResponseModule,
+			'../../../src/models/index.js': stubs.models
 		});
 
-	const callFunction = functionName => {
+	const callFunction = async functionName => {
 
-		const productionsController = createSubject();
+		const productionsController = await createSubject();
 
 		return productionsController[functionName](stubs.request, stubs.response, stubs.next);
 
@@ -51,9 +51,9 @@ describe('Productions controller', () => {
 
 	describe('newRoute function', () => {
 
-		it('calls sendJsonResponse module', () => {
+		it('calls sendJsonResponse module', async () => {
 
-			const result = callFunction('newRoute');
+			const result = await callFunction('newRoute');
 			assert.calledOnceWithExactly(
 				stubs.sendJsonResponseModule.sendJsonResponse,
 				stubs.response, stubs.models.Production() // eslint-disable-line new-cap

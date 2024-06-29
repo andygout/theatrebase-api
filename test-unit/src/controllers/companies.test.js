@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import proxyquire from 'proxyquire';
+import esmock from 'esmock';
 import { assert, createStubInstance, stub } from 'sinon';
 
-import { Company } from '../../../src/models';
+import { Company } from '../../../src/models/index.js';
 
 describe('Companies controller', () => {
 
@@ -35,15 +35,15 @@ describe('Companies controller', () => {
 	});
 
 	const createSubject = () =>
-		proxyquire('../../../src/controllers/companies', {
-			'../lib/call-class-methods': stubs.callClassMethodsModule,
-			'../lib/send-json-response': stubs.sendJsonResponseModule,
-			'../models': stubs.models
+		esmock('../../../src/controllers/companies.js', {
+			'../../../src/lib/call-class-methods.js': stubs.callClassMethodsModule,
+			'../../../src/lib/send-json-response.js': stubs.sendJsonResponseModule,
+			'../../../src/models/index.js': stubs.models
 		});
 
-	const callFunction = functionName => {
+	const callFunction = async functionName => {
 
-		const companiesController = createSubject();
+		const companiesController = await createSubject();
 
 		return companiesController[functionName](stubs.request, stubs.response, stubs.next);
 
@@ -51,9 +51,9 @@ describe('Companies controller', () => {
 
 	describe('newRoute function', () => {
 
-		it('calls sendJsonResponse module', () => {
+		it('calls sendJsonResponse module', async () => {
 
-			const result = callFunction('newRoute');
+			const result = await callFunction('newRoute');
 			assert.calledOnceWithExactly(
 				stubs.sendJsonResponseModule.sendJsonResponse,
 				stubs.response, stubs.models.Company() // eslint-disable-line new-cap

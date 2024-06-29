@@ -1,10 +1,10 @@
 /* eslint no-unused-vars: ["error", { "argsIgnorePattern": "next" }] */
 
-import { venue as venueSeedProps } from './model-seed-props';
-import { callInstanceMethod, callStaticListMethod } from '../lib/call-class-methods';
-import { sendJsonResponse } from '../lib/send-json-response';
-import { Venue } from '../models';
-import { ACTIONS, MODELS } from '../utils/constants';
+import { venue as venueSeedProps } from './model-seed-props/index.js';
+import { callInstanceMethod, callStaticListMethod } from '../lib/call-class-methods.js';
+import { sendJsonResponse } from '../lib/send-json-response.js';
+import { Venue } from '../models/index.js';
+import { ACTIONS, MODELS } from '../utils/constants.js';
 
 const newRoute = (request, response, next) =>
 	sendJsonResponse(response, new Venue(venueSeedProps));

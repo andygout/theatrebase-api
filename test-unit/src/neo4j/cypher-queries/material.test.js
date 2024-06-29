@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import * as cypherQueriesMaterial from '../../../../src/neo4j/cypher-queries/material';
-import removeExcessWhitespace from '../../../test-helpers/remove-excess-whitespace';
+import * as cypherQueriesMaterial from '../../../../src/neo4j/cypher-queries/material/index.js';
+import removeExcessWhitespace from '../../../test-helpers/remove-excess-whitespace.js';
 
 describe('Cypher Queries Material module', () => {
 

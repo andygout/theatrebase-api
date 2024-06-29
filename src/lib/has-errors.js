@@ -1,4 +1,4 @@
-import isObjectWithKeys from './is-object-with-keys';
+import isObjectWithKeys from './is-object-with-keys.js';
 
 const isErrorsProperty = (prop, value) => prop === 'errors' && isObjectWithKeys(value);
 

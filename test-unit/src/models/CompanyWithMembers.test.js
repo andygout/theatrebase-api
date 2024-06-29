@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import proxyquire from 'proxyquire';
+import esmock from 'esmock';
 import { assert, createStubInstance, spy, stub } from 'sinon';
 
-import { Person } from '../../../src/models';
+import { Person } from '../../../src/models/index.js';
 
 describe('CompanyWithMembers model', () => {
 
@@ -28,14 +28,14 @@ describe('CompanyWithMembers model', () => {
 	});
 
 	const createSubject = () =>
-		proxyquire('../../../src/models/CompanyWithMembers', {
-			'../lib/get-duplicate-entity-info': stubs.getDuplicateEntityInfoModule,
-			'.': stubs.models
-		}).default;
+		esmock('../../../src/models/CompanyWithMembers', {
+			'../../../src/lib/get-duplicate-entity-info': stubs.getDuplicateEntityInfoModule,
+			'../../../src/models/index.js': stubs.models
+		});
 
-	const createInstance = props => {
+	const createInstance = async props => {
 
-		const Person = createSubject();
+		const Person = await createSubject();
 
 		return new Person(props);
 
@@ -45,14 +45,14 @@ describe('CompanyWithMembers model', () => {
 
 		describe('members property', () => {
 
-			it('assigns empty array if absent from props', () => {
+			it('assigns empty array if absent from props', async () => {
 
-				const instance = createInstance({ name: 'Autograph' });
+				const instance = await createInstance({ name: 'Autograph' });
 				expect(instance.members).to.deep.equal([]);
 
 			});
 
-			it('assigns array of members if included in props, retaining those with empty or whitespace-only string names', () => {
+			it('assigns array of members if included in props, retaining those with empty or whitespace-only string names', async () => {
 
 				const props = {
 					name: 'Autograph',
@@ -68,7 +68,7 @@ describe('CompanyWithMembers model', () => {
 						}
 					]
 				};
-				const instance = createInstance(props);
+				const instance = await createInstance(props);
 				expect(instance.members.length).to.equal(3);
 				expect(instance.members[0] instanceof Person).to.be.true;
 				expect(instance.members[1] instanceof Person).to.be.true;
@@ -82,7 +82,7 @@ describe('CompanyWithMembers model', () => {
 
 	describe('runInputValidations method', () => {
 
-		it('calls instance\'s validate methods and associated models\' validate methods', () => {
+		it('calls instance\'s validate methods and associated models\' validate methods', async () => {
 
 			const props = {
 				name: 'Fiery Angel',
@@ -92,7 +92,7 @@ describe('CompanyWithMembers model', () => {
 					}
 				]
 			};
-			const instance = createInstance(props);
+			const instance = await createInstance(props);
 			spy(instance, 'validateNamePresenceIfNamedChildren');
 			instance.runInputValidations({ duplicateEntities: [] });
 			assert.callOrder(

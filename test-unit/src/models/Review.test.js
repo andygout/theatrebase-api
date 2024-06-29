@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import proxyquire from 'proxyquire';
+import esmock from 'esmock';
 import { assert, createStubInstance, spy, stub } from 'sinon';
 
-import { Company, Person } from '../../../src/models';
+import { Company, Person } from '../../../src/models/index.js';
 
 describe('Review model', () => {
 
@@ -38,15 +38,15 @@ describe('Review model', () => {
 	});
 
 	const createSubject = () =>
-		proxyquire('../../../src/models/Review', {
-			'../lib/is-valid-date': stubs.isValidDateModule,
-			'../lib/strings': stubs.stringsModule,
-			'.': stubs.models
-		}).default;
+		esmock('../../../src/models/Review.js', {
+			'../../../src/lib/is-valid-date.js': stubs.isValidDateModule,
+			'../../../src/lib/strings.js': stubs.stringsModule,
+			'../../../src/models/index.js': stubs.models
+		});
 
-	const createInstance = props => {
+	const createInstance = async props => {
 
-		const Review = createSubject();
+		const Review = await createSubject();
 
 		return new Review(props);
 
@@ -54,18 +54,18 @@ describe('Review model', () => {
 
 	describe('constructor method', () => {
 
-		it('calls getTrimmedOrEmptyString to get values to assign to properties', () => {
+		it('calls getTrimmedOrEmptyString to get values to assign to properties', async () => {
 
-			createInstance();
+			await createInstance();
 			expect(stubs.stringsModule.getTrimmedOrEmptyString.callCount).to.equal(2);
 
 		});
 
 		describe('url property', () => {
 
-			it('assigns return value from getTrimmedOrEmptyString called with props value', () => {
+			it('assigns return value from getTrimmedOrEmptyString called with props value', async () => {
 
-				const instance = createInstance({ url: 'https://www.foo.com' });
+				const instance = await createInstance({ url: 'https://www.foo.com' });
 				assert.calledWithExactly(stubs.stringsModule.getTrimmedOrEmptyString.firstCall, 'https://www.foo.com');
 				expect(instance.url).to.equal('https://www.foo.com');
 
@@ -75,9 +75,9 @@ describe('Review model', () => {
 
 		describe('date property', () => {
 
-			it('assigns return value from getTrimmedOrEmptyString called with props value', () => {
+			it('assigns return value from getTrimmedOrEmptyString called with props value', async () => {
 
-				const instance = createInstance({ date: '2024-04-03' });
+				const instance = await createInstance({ date: '2024-04-03' });
 				assert.calledWithExactly(stubs.stringsModule.getTrimmedOrEmptyString.secondCall, '2024-04-03');
 				expect(instance.date).to.equal('2024-04-03');
 
@@ -87,16 +87,16 @@ describe('Review model', () => {
 
 		describe('publication property', () => {
 
-			it('assigns instance if absent from props', () => {
+			it('assigns instance if absent from props', async () => {
 
-				const instance = createInstance({ url: 'https://www.foo.com' });
+				const instance = await createInstance({ url: 'https://www.foo.com' });
 				expect(instance.publication instanceof Company).to.be.true;
 
 			});
 
-			it('assigns instance if included in props', () => {
+			it('assigns instance if included in props', async () => {
 
-				const instance = createInstance({
+				const instance = await createInstance({
 					url: 'https://www.foo.com',
 					publication: {
 						name: 'Financial Times'
@@ -110,16 +110,16 @@ describe('Review model', () => {
 
 		describe('critic property', () => {
 
-			it('assigns instance if absent from props', () => {
+			it('assigns instance if absent from props', async () => {
 
-				const instance = createInstance({ url: 'https://www.foo.com' });
+				const instance = await createInstance({ url: 'https://www.foo.com' });
 				expect(instance.critic instanceof Person).to.be.true;
 
 			});
 
-			it('assigns instance if included in props', () => {
+			it('assigns instance if included in props', async () => {
 
-				const instance = createInstance({
+				const instance = await createInstance({
 					name: 'https://www.foo.com',
 					critic: {
 						name: 'Sarah Hemming'
@@ -137,7 +137,7 @@ describe('Review model', () => {
 
 		context('instance url value is non-empty string', () => {
 
-			it('calls instance\'s validate methods and associated models\' validate methods', () => {
+			it('calls instance\'s validate methods and associated models\' validate methods', async () => {
 
 				const props = {
 					url: 'https://www.foo.com',
@@ -148,7 +148,7 @@ describe('Review model', () => {
 						name: 'Sarah Hemming'
 					}
 				};
-				const instance = createInstance(props);
+				const instance = await createInstance(props);
 				spy(instance, 'validateUrl');
 				spy(instance, 'validateUniquenessInGroup');
 				spy(instance, 'validateUrlPresenceIfNamedChildren');
@@ -185,7 +185,7 @@ describe('Review model', () => {
 
 		context('instance url value is empty string', () => {
 
-			it('calls instance\'s publication and critic validateName methods with an argument that it is not required', () => {
+			it('calls instance\'s publication and critic validateName methods with an argument that it is not required', async () => {
 
 				const props = {
 					url: '',
@@ -196,7 +196,7 @@ describe('Review model', () => {
 						name: 'Sarah Hemming'
 					}
 				};
-				const instance = createInstance(props);
+				const instance = await createInstance(props);
 				instance.runInputValidations({ isDuplicate: false });
 				assert.calledOnceWithExactly(instance.publication.validateName, { isRequired: false });
 				assert.calledOnceWithExactly(instance.critic.validateName, { isRequired: false });
@@ -209,9 +209,9 @@ describe('Review model', () => {
 
 	describe('validateUrl method', () => {
 
-		it('will call validateStringForProperty method', () => {
+		it('will call validateStringForProperty method', async () => {
 
-			const instance = createInstance({ url: 'https://www.foo.com' });
+			const instance = await createInstance({ url: 'https://www.foo.com' });
 			spy(instance, 'validateStringForProperty');
 			instance.validateUrl({ isRequired: false });
 			assert.calledOnceWithExactly(
@@ -223,9 +223,9 @@ describe('Review model', () => {
 
 		context('url property is a valid URL', () => {
 
-			it('will not call addPropertyError method', () => {
+			it('will not call addPropertyError method', async () => {
 
-				const instance = createInstance({ url: 'https://www.foo.com' });
+				const instance = await createInstance({ url: 'https://www.foo.com' });
 				spy(instance, 'addPropertyError');
 				instance.validateUrl({ isRequired: false });
 				assert.notCalled(instance.addPropertyError);
@@ -236,9 +236,9 @@ describe('Review model', () => {
 
 		context('url property is an empty string', () => {
 
-			it('will not call addPropertyError method', () => {
+			it('will not call addPropertyError method', async () => {
 
-				const instance = createInstance({ url: '' });
+				const instance = await createInstance({ url: '' });
 				spy(instance, 'addPropertyError');
 				instance.validateUrl({ isRequired: false });
 				assert.notCalled(instance.addPropertyError);
@@ -249,9 +249,9 @@ describe('Review model', () => {
 
 		context('url property is a non-empty string that is not a valid URL', () => {
 
-			it('will call addPropertyError method', () => {
+			it('will call addPropertyError method', async () => {
 
-				const instance = createInstance({ url: 'foobar' });
+				const instance = await createInstance({ url: 'foobar' });
 				spy(instance, 'addPropertyError');
 				instance.validateUrl({ isRequired: false });
 				assert.calledOnceWithExactly(
@@ -267,9 +267,9 @@ describe('Review model', () => {
 
 	describe('validateUrlPresenceIfNamedChildren method', () => {
 
-		it('will call validatePropertyPresenceIfNamedChildren', () => {
+		it('will call validatePropertyPresenceIfNamedChildren', async () => {
 
-			const instance = createInstance();
+			const instance = await createInstance();
 			spy(instance, 'validatePropertyPresenceIfNamedChildren');
 			instance.validateUrlPresenceIfNamedChildren([{ name: 'Financial Times' }, { name: 'Sarah Hemming' }]);
 			assert.calledOnceWithExactly(
@@ -287,9 +287,9 @@ describe('Review model', () => {
 
 			context('date is an empty string', () => {
 
-				it('will not call isValidDate or addPropertyError method', () => {
+				it('will not call isValidDate or addPropertyError method', async () => {
 
-					const instance = createInstance({ date: '' });
+					const instance = await createInstance({ date: '' });
 					spy(instance, 'addPropertyError');
 					instance.validateDate();
 					assert.notCalled(stubs.isValidDateModule.isValidDate);
@@ -301,9 +301,9 @@ describe('Review model', () => {
 
 			context('date is in a valid date format', () => {
 
-				it('will call isValidDate; will not call addPropertyError method', () => {
+				it('will call isValidDate; will not call addPropertyError method', async () => {
 
-					const instance = createInstance({ date: '2024-04-03' });
+					const instance = await createInstance({ date: '2024-04-03' });
 					spy(instance, 'addPropertyError');
 					instance.validateDate();
 					assert.calledOnceWithExactly(stubs.isValidDateModule.isValidDate, instance.date);
@@ -319,10 +319,10 @@ describe('Review model', () => {
 
 			context('date is in an invalid date format', () => {
 
-				it('will call isValidDate and addPropertyError method', () => {
+				it('will call isValidDate and addPropertyError method', async () => {
 
 					stubs.isValidDateModule.isValidDate.returns(false);
-					const instance = createInstance({ date: 'foobar' });
+					const instance = await createInstance({ date: 'foobar' });
 					spy(instance, 'addPropertyError');
 					instance.validateDate();
 					assert.calledOnceWithExactly(stubs.isValidDateModule.isValidDate, instance.date);

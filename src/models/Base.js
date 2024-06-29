@@ -1,6 +1,6 @@
-import { getTrimmedOrEmptyString } from '../lib/strings';
-import { validateString } from '../lib/validate-string';
-import { MODELS } from '../utils/constants';
+import { getTrimmedOrEmptyString } from '../lib/strings.js';
+import { validateString } from '../lib/validate-string.js';
+import { MODELS } from '../utils/constants.js';
 
 const NAME_EXEMPT_MODELS = new Set([
 	MODELS.NOMINATION,

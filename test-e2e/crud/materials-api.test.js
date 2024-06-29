@@ -2,10 +2,10 @@ import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import { createSandbox } from 'sinon';
 
-import * as getRandomUuidModule from '../../src/lib/get-random-uuid';
-import app from '../../src/app';
-import { countNodesWithLabel, purgeDatabase } from '../test-helpers/neo4j';
-import { getStubUuid } from '../test-helpers';
+import * as getRandomUuidModule from '../../src/lib/get-random-uuid.js';
+import app from '../../src/app.js';
+import { countNodesWithLabel, purgeDatabase } from '../test-helpers/neo4j/index.js';
+import { getStubUuid } from '../test-helpers/index.js';
 
 chai.use(chaiHttp);
 

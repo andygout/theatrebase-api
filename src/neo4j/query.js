@@ -1,5 +1,5 @@
-import { convertNeo4jRecordsToObjects } from './convert-neo4j-records-to-objects';
-import { getDriver } from './get-driver';
+import { convertNeo4jRecordsToObjects } from './convert-neo4j-records-to-objects.js';
+import { getDriver } from './get-driver.js';
 
 const driver = getDriver();
 

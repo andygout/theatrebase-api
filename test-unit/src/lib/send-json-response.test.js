@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import httpMocks from 'node-mocks-http';
 
-import { sendJsonResponse } from '../../../src/lib/send-json-response';
+import { sendJsonResponse } from '../../../src/lib/send-json-response.js';
 
 describe('Send JSON Response module', () => {
 

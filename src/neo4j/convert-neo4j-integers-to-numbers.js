@@ -1,6 +1,6 @@
 import neo4j from 'neo4j-driver';
 
-import isObjectWithKeys from '../lib/is-object-with-keys';
+import isObjectWithKeys from '../lib/is-object-with-keys.js';
 
 export const convertNeo4jIntegersToNumbers = inputValue => {
 

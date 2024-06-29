@@ -1,8 +1,8 @@
-const fs = require('node:fs');
-const path = require('node:path');
+import fs from 'node:fs';
+import path from 'node:path';
 
-const directly = require('directly');
-const jsonlint = require('jsonlint');
+import directly from 'directly';
+import jsonlint from 'jsonlint';
 
 const BASE_URL = 'http://localhost:3000';
 

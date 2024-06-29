@@ -1,45 +1,45 @@
-import { getShowQueries as getAwardShowQueries } from './award';
+import { getShowQueries as getAwardShowQueries } from './award/index.js';
 import {
 	getCreateQuery as getAwardCeremonyCreateQuery,
 	getEditQuery as getAwardCeremonyEditQuery,
 	getUpdateQuery as getAwardCeremonyUpdateQuery,
 	getShowQueries as getAwardCeremonyShowQueries,
 	getListQuery as getAwardCeremonyListQuery
-} from './award-ceremony';
-import { getShowQueries as getCharacterShowQueries } from './character';
-import { getShowQueries as getCompanyShowQueries } from './company';
+} from './award-ceremony/index.js';
+import { getShowQueries as getCharacterShowQueries } from './character/index.js';
+import { getShowQueries as getCompanyShowQueries } from './company/index.js';
 import {
 	getCreateQuery as getFestivalCreateQuery,
 	getEditQuery as getFestivalEditQuery,
 	getUpdateQuery as getFestivalUpdateQuery,
 	getShowQueries as getFestivalShowQueries,
 	getListQuery as getFestivalListQuery
-} from './festival';
-import { getShowQueries as getFestivalSeriesShowQueries } from './festival-series';
+} from './festival/index.js';
+import { getShowQueries as getFestivalSeriesShowQueries } from './festival-series/index.js';
 import {
 	getCreateQuery as getMaterialCreateQuery,
 	getEditQuery as getMaterialEditQuery,
 	getUpdateQuery as getMaterialUpdateQuery,
 	getShowQueries as getMaterialShowQueries,
 	getListQuery as getMaterialListQuery
-} from './material';
-import { getShowQueries as getPersonShowQueries } from './person';
+} from './material/index.js';
+import { getShowQueries as getPersonShowQueries } from './person/index.js';
 import {
 	getCreateQuery as getProductionCreateQuery,
 	getEditQuery as getProductionEditQuery,
 	getUpdateQuery as getProductionUpdateQuery,
 	getShowQueries as getProductionShowQueries,
 	getListQuery as getProductionListQuery
-} from './production';
-import { getSearchQuery } from './search';
-import { getShowQueries as getSeasonShowQueries } from './season';
+} from './production/index.js';
+import { getSearchQuery } from './search/index.js';
+import { getShowQueries as getSeasonShowQueries } from './season/index.js';
 import {
 	getCreateQuery as getSharedCreateQuery,
 	getEditQuery as getSharedEditQuery,
 	getUpdateQuery as getSharedUpdateQuery,
 	getDeleteQuery as getSharedDeleteQuery,
 	getListQuery as getSharedListQuery
-} from './shared';
+} from './shared/index.js';
 import {
 	getAwardContextualDuplicateRecordCheckQuery,
 	getDuplicateRecordCheckQuery,
@@ -49,15 +49,15 @@ import {
 	getSubMaterialChecksQuery,
 	getSubProductionChecksQuery,
 	getSubVenueChecksQuery
-} from './validation';
+} from './validation/index.js';
 import {
 	getCreateQuery as getVenueCreateQuery,
 	getEditQuery as getVenueEditQuery,
 	getUpdateQuery as getVenueUpdateQuery,
 	getShowQueries as getVenueShowQueries,
 	getListQuery as getVenueListQuery
-} from './venue';
-import { MODELS } from '../../utils/constants';
+} from './venue/index.js';
+import { MODELS } from '../../utils/constants.js';
 
 const getCreateQueries = {
 	[MODELS.AWARD_CEREMONY]: getAwardCeremonyCreateQuery,

@@ -1,8 +1,8 @@
-import getCreateQuery from './create';
-import getDeleteQuery from './delete';
-import getEditQuery from './edit';
-import getListQuery from './list';
-import getUpdateQuery from './update';
+import getCreateQuery from './create.js';
+import getDeleteQuery from './delete.js';
+import getEditQuery from './edit.js';
+import getListQuery from './list.js';
+import getUpdateQuery from './update.js';
 
 export {
 	getCreateQuery,

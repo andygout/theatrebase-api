@@ -1,6 +1,6 @@
-import { getTrimmedOrEmptyString } from '../lib/strings';
-import Base from './Base';
-import { MODELS } from '../utils/constants';
+import { getTrimmedOrEmptyString } from '../lib/strings.js';
+import Base from './Base.js';
+import { MODELS } from '../utils/constants.js';
 
 export default class Role extends Base {
 

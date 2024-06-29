@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import proxyquire from 'proxyquire';
+import esmock from 'esmock';
 import { assert, createStubInstance, spy, stub } from 'sinon';
 
-import { CompanyWithMembers, MaterialBase, NominatedProductionIdentifier, Person } from '../../../src/models';
+import { CompanyWithMembers, MaterialBase, NominatedProductionIdentifier, Person } from '../../../src/models/index.js';
 
 describe('Nomination model', () => {
 
@@ -57,16 +57,16 @@ describe('Nomination model', () => {
 	});
 
 	const createSubject = () =>
-		proxyquire('../../../src/models/Nomination', {
-			'../lib/get-duplicate-entity-info': stubs.getDuplicateEntityInfoModule,
-			'../lib/get-duplicate-indices': stubs.getDuplicateIndicesModule,
-			'../lib/strings': stubs.stringsModule,
-			'.': stubs.models
-		}).default;
+		esmock('../../../src/models/Nomination.js', {
+			'../../../src/lib/get-duplicate-entity-info.js': stubs.getDuplicateEntityInfoModule,
+			'../../../src/lib/get-duplicate-indices.js': stubs.getDuplicateIndicesModule,
+			'../../../src/lib/strings.js': stubs.stringsModule,
+			'../../../src/models/index.js': stubs.models
+		});
 
-	const createInstance = props => {
+	const createInstance = async props => {
 
-		const Nomination = createSubject();
+		const Nomination = await createSubject();
 
 		return new Nomination(props);
 
@@ -76,55 +76,55 @@ describe('Nomination model', () => {
 
 		describe('isWinner property', () => {
 
-			it('assigns false if absent from props', () => {
+			it('assigns false if absent from props', async () => {
 
-				const instance = createInstance({});
+				const instance = await createInstance({});
 				expect(instance.isWinner).to.equal(false);
 
 			});
 
-			it('assigns false if included in props but value evaluates to false', () => {
+			it('assigns false if included in props but value evaluates to false', async () => {
 
-				const instance = createInstance({ isWinner: null });
+				const instance = await createInstance({ isWinner: null });
 				expect(instance.isWinner).to.equal(false);
 
 			});
 
-			it('assigns false if included in props but value is false', () => {
+			it('assigns false if included in props but value is false', async () => {
 
-				const instance = createInstance({ isWinner: false });
+				const instance = await createInstance({ isWinner: false });
 				expect(instance.isWinner).to.equal(false);
 
 			});
 
-			it('assigns true if included in props and value evaluates to true', () => {
+			it('assigns true if included in props and value evaluates to true', async () => {
 
-				const instance = createInstance({ isWinner: 'foobar' });
+				const instance = await createInstance({ isWinner: 'foobar' });
 				expect(instance.isWinner).to.equal(true);
 
 			});
 
-			it('assigns true if included in props and is true', () => {
+			it('assigns true if included in props and is true', async () => {
 
-				const instance = createInstance({ isWinner: true });
+				const instance = await createInstance({ isWinner: true });
 				expect(instance.isWinner).to.equal(true);
 
 			});
 
 		});
 
-		it('calls getTrimmedOrEmptyString to get values to assign to properties', () => {
+		it('calls getTrimmedOrEmptyString to get values to assign to properties', async () => {
 
-			createInstance();
+			await createInstance();
 			expect(stubs.stringsModule.getTrimmedOrEmptyString.callCount).to.equal(1);
 
 		});
 
 		describe('customType property', () => {
 
-			it('assigns return value from getTrimmedOrEmptyString called with props value', () => {
+			it('assigns return value from getTrimmedOrEmptyString called with props value', async () => {
 
-				const instance = createInstance({ customType: 'Shortlisted' });
+				const instance = await createInstance({ customType: 'Shortlisted' });
 				assert.calledWithExactly(stubs.stringsModule.getTrimmedOrEmptyString.firstCall, 'Shortlisted');
 				expect(instance.customType).to.equal('Shortlisted');
 
@@ -134,14 +134,14 @@ describe('Nomination model', () => {
 
 		describe('entities property', () => {
 
-			it('assigns empty array if absent from props', () => {
+			it('assigns empty array if absent from props', async () => {
 
-				const instance = createInstance({});
+				const instance = await createInstance({});
 				expect(instance.entities).to.deep.equal([]);
 
 			});
 
-			it('assigns array of entities if included in props (defaulting to person if model is unspecified), retaining those with empty or whitespace-only string names', () => {
+			it('assigns array of entities if included in props (defaulting to person if model is unspecified), retaining those with empty or whitespace-only string names', async () => {
 
 				const props = {
 					entities: [
@@ -168,7 +168,7 @@ describe('Nomination model', () => {
 						}
 					]
 				};
-				const instance = createInstance(props);
+				const instance = await createInstance(props);
 				expect(instance.entities.length).to.equal(6);
 				expect(instance.entities[0] instanceof Person).to.be.true;
 				expect(instance.entities[1] instanceof CompanyWithMembers).to.be.true;
@@ -183,14 +183,14 @@ describe('Nomination model', () => {
 
 		describe('productions property', () => {
 
-			it('assigns empty array if absent from props', () => {
+			it('assigns empty array if absent from props', async () => {
 
-				const instance = createInstance({});
+				const instance = await createInstance({});
 				expect(instance.productions).to.deep.equal([]);
 
 			});
 
-			it('assigns array of productions if included in props, retaining those with empty or whitespace-only string uuids', () => {
+			it('assigns array of productions if included in props, retaining those with empty or whitespace-only string uuids', async () => {
 
 				const props = {
 					productions: [
@@ -205,7 +205,7 @@ describe('Nomination model', () => {
 						}
 					]
 				};
-				const instance = createInstance(props);
+				const instance = await createInstance(props);
 				expect(instance.productions.length).to.equal(3);
 				expect(instance.productions[0] instanceof NominatedProductionIdentifier).to.be.true;
 				expect(instance.productions[1] instanceof NominatedProductionIdentifier).to.be.true;
@@ -217,14 +217,14 @@ describe('Nomination model', () => {
 
 		describe('materials property', () => {
 
-			it('assigns empty array if absent from props', () => {
+			it('assigns empty array if absent from props', async () => {
 
-				const instance = createInstance({});
+				const instance = await createInstance({});
 				expect(instance.materials).to.deep.equal([]);
 
 			});
 
-			it('assigns array of materials if included in props, retaining those with empty or whitespace-only string names', () => {
+			it('assigns array of materials if included in props, retaining those with empty or whitespace-only string names', async () => {
 
 				const props = {
 					materials: [
@@ -239,7 +239,7 @@ describe('Nomination model', () => {
 						}
 					]
 				};
-				const instance = createInstance(props);
+				const instance = await createInstance(props);
 				expect(instance.materials.length).to.equal(3);
 				expect(instance.materials[0] instanceof MaterialBase).to.be.true;
 				expect(instance.materials[1] instanceof MaterialBase).to.be.true;
@@ -253,7 +253,7 @@ describe('Nomination model', () => {
 
 	describe('runInputValidations method', () => {
 
-		it('calls instance\'s validate methods and associated models\' validate methods', () => {
+		it('calls instance\'s validate methods and associated models\' validate methods', async () => {
 
 			const props = {
 				customType: 'Shortlisted',
@@ -277,7 +277,7 @@ describe('Nomination model', () => {
 					}
 				]
 			};
-			const instance = createInstance(props);
+			const instance = await createInstance(props);
 			spy(instance, 'validateCustomType');
 			instance.runInputValidations();
 			assert.callOrder(
@@ -347,9 +347,9 @@ describe('Nomination model', () => {
 
 	describe('validateCustomType method', () => {
 
-		it('will call validateStringForProperty method', () => {
+		it('will call validateStringForProperty method', async () => {
 
-			const instance = createInstance({ customType: 'Shortlisted' });
+			const instance = await createInstance({ customType: 'Shortlisted' });
 			spy(instance, 'validateStringForProperty');
 			instance.validateCustomType({ isRequired: false });
 			assert.calledOnceWithExactly(
@@ -372,7 +372,7 @@ describe('Nomination model', () => {
 					}
 				]
 			};
-			const instance = createInstance(props);
+			const instance = await createInstance(props);
 			await instance.runDatabaseValidations();
 			assert.calledOnceWithExactly(instance.productions[0].runDatabaseValidations);
 

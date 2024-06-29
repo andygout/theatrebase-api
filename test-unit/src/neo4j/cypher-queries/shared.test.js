@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import * as cypherQueriesShared from '../../../../src/neo4j/cypher-queries/shared';
-import removeExcessWhitespace from '../../../test-helpers/remove-excess-whitespace';
+import * as cypherQueriesShared from '../../../../src/neo4j/cypher-queries/shared/index.js';
+import removeExcessWhitespace from '../../../test-helpers/remove-excess-whitespace.js';
 
 describe('Cypher Queries Shared module', () => {
 

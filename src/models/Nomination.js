@@ -1,9 +1,9 @@
-import { getDuplicateEntities, isEntityInArray } from '../lib/get-duplicate-entity-info';
-import { getDuplicateBaseInstanceIndices, getDuplicateUuidIndices } from '../lib/get-duplicate-indices';
-import { getTrimmedOrEmptyString } from '../lib/strings';
-import Base from './Base';
-import { CompanyWithMembers, MaterialBase, NominatedProductionIdentifier, Person } from '.';
-import { MODELS } from '../utils/constants';
+import { getDuplicateEntities, isEntityInArray } from '../lib/get-duplicate-entity-info.js';
+import { getDuplicateBaseInstanceIndices, getDuplicateUuidIndices } from '../lib/get-duplicate-indices.js';
+import { getTrimmedOrEmptyString } from '../lib/strings.js';
+import Base from './Base.js';
+import { CompanyWithMembers, MaterialBase, NominatedProductionIdentifier, Person } from './index.js';
+import { MODELS } from '../utils/constants.js';
 
 export default class Nomination extends Base {
 

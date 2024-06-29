@@ -1,7 +1,7 @@
-import { prepareAsParams } from '../lib/prepare-as-params';
-import VenueBase from './VenueBase';
-import { validationQueries } from '../neo4j/cypher-queries';
-import { neo4jQuery } from '../neo4j/query';
+import { prepareAsParams } from '../lib/prepare-as-params.js';
+import VenueBase from './VenueBase.js';
+import { validationQueries } from '../neo4j/cypher-queries/index.js';
+import { neo4jQuery } from '../neo4j/query.js';
 
 export default class SubVenue extends VenueBase {
 

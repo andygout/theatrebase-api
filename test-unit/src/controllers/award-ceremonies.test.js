@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import proxyquire from 'proxyquire';
+import esmock from 'esmock';
 import { assert, createStubInstance, stub } from 'sinon';
 
-import { AwardCeremony } from '../../../src/models';
+import { AwardCeremony } from '../../../src/models/index.js';
 
 describe('Award ceremonies controller', () => {
 
@@ -35,15 +35,15 @@ describe('Award ceremonies controller', () => {
 	});
 
 	const createSubject = () =>
-		proxyquire('../../../src/controllers/award-ceremonies', {
-			'../lib/call-class-methods': stubs.callClassMethodsModule,
-			'../lib/send-json-response': stubs.sendJsonResponseModule,
-			'../models': stubs.models
+		esmock('../../../src/controllers/award-ceremonies.js', {
+			'../../../src/lib/call-class-methods.js': stubs.callClassMethodsModule,
+			'../../../src/lib/send-json-response.js': stubs.sendJsonResponseModule,
+			'../../../src/models/index.js': stubs.models
 		});
 
-	const callFunction = functionName => {
+	const callFunction = async functionName => {
 
-		const awardCeremoniesController = createSubject();
+		const awardCeremoniesController = await createSubject();
 
 		return awardCeremoniesController[functionName](stubs.request, stubs.response, stubs.next);
 
@@ -51,9 +51,9 @@ describe('Award ceremonies controller', () => {
 
 	describe('newRoute function', () => {
 
-		it('calls sendJsonResponse module', () => {
+		it('calls sendJsonResponse module', async () => {
 
-			const result = callFunction('newRoute');
+			const result = await callFunction('newRoute');
 			assert.calledOnceWithExactly(
 				stubs.sendJsonResponseModule.sendJsonResponse,
 				stubs.response, stubs.models.AwardCeremony() // eslint-disable-line new-cap

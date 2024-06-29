@@ -1,5 +1,5 @@
-import getShowQuery from './show';
-import getShowAwardsQuery from './show-awards';
+import getShowQuery from './show.js';
+import getShowAwardsQuery from './show-awards.js';
 
 export default () => [
 	getShowQuery(),

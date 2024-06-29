@@ -1,6 +1,6 @@
-import { isEntityInArray } from '../lib/get-duplicate-entity-info';
-import Company from './Company';
-import { Person } from '.';
+import { isEntityInArray } from '../lib/get-duplicate-entity-info.js';
+import Company from './Company.js';
+import { Person } from './index.js';
 
 export default class CompanyWithMembers extends Company {
 

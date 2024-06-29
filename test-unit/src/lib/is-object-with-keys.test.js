@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import isObjectWithKeys from '../../../src/lib/is-object-with-keys';
+import isObjectWithKeys from '../../../src/lib/is-object-with-keys.js';
 
 describe('Is Object With Keys module', () => {
 

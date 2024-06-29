@@ -1,7 +1,7 @@
-import { getCreateQuery, getUpdateQuery } from './create-update';
-import getEditQuery from './edit';
-import getListQuery from './list';
-import getShowQueries from './show';
+import { getCreateQuery, getUpdateQuery } from './create-update.js';
+import getEditQuery from './edit.js';
+import getListQuery from './list.js';
+import getShowQueries from './show.js';
 
 export {
 	getCreateQuery,

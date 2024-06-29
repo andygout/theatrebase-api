@@ -1,6 +1,6 @@
-import { getTrimmedOrEmptyString } from '../lib/strings';
-import Entity from './Entity';
-import { MODELS } from '../utils/constants';
+import { getTrimmedOrEmptyString } from '../lib/strings.js';
+import Entity from './Entity.js';
+import { MODELS } from '../utils/constants.js';
 
 export default class ProductionIdentifier extends Entity {
 

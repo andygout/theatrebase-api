@@ -15,7 +15,7 @@ import {
 	search as searchController,
 	seasons as seasonsController,
 	venues as venuesController
-} from './controllers';
+} from './controllers/index.js';
 
 const router = new Router();
 

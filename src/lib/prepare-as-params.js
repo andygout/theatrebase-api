@@ -1,7 +1,7 @@
 import neo4j from 'neo4j-driver';
 
-import { getRandomUuid } from './get-random-uuid';
-import isObjectWithKeys from './is-object-with-keys';
+import { getRandomUuid } from './get-random-uuid.js';
+import isObjectWithKeys from './is-object-with-keys.js';
 
 const CHARACTER_GROUPS = 'characterGroups';
 const CREATIVE_CREDITS = 'creativeCredits';

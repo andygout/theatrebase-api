@@ -1,5 +1,4 @@
 {
   "file": "test-int/mocha.env.js",
-  "require": "@babel/register",
   "spec": "test-int/**/*.test.js"
 }

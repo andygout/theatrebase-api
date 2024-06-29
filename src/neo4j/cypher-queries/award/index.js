@@ -1,4 +1,4 @@
-import getShowQueries from './show';
+import getShowQueries from './show.js';
 
 export {
 	getShowQueries

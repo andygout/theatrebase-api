@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import * as cypherQueriesValidation from '../../../../src/neo4j/cypher-queries/validation';
-import removeExcessWhitespace from '../../../test-helpers/remove-excess-whitespace';
+import * as cypherQueriesValidation from '../../../../src/neo4j/cypher-queries/validation/index.js';
+import removeExcessWhitespace from '../../../test-helpers/remove-excess-whitespace.js';
 
 describe('Cypher Queries Validation module', () => {
 

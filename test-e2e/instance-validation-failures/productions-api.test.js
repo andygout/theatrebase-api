@@ -1,14 +1,14 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 
-import app from '../../src/app';
+import app from '../../src/app.js';
 import {
 	countNodesWithLabel,
 	createNode,
 	createRelationship,
 	isNodeExistent,
 	purgeDatabase
-} from '../test-helpers/neo4j';
+} from '../test-helpers/neo4j/index.js';
 
 const STRING_MAX_LENGTH = 1000;
 const ABOVE_MAX_LENGTH_STRING = 'a'.repeat(STRING_MAX_LENGTH + 1);

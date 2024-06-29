@@ -1,5 +1,5 @@
-import Entity from './Entity';
-import { MODELS } from '../utils/constants';
+import Entity from './Entity.js';
+import { MODELS } from '../utils/constants.js';
 
 export default class MaterialBase extends Entity {
 

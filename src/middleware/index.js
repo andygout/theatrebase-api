@@ -1,5 +1,5 @@
-import accessControlSetter from './access-control-setter';
-import errorHandler from './error-handler';
+import accessControlSetter from './access-control-setter.js';
+import errorHandler from './error-handler.js';
 
 export {
 	accessControlSetter,

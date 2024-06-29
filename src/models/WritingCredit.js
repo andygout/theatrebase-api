@@ -1,7 +1,7 @@
-import { getDuplicateEntityIndices } from '../lib/get-duplicate-indices';
-import Base from './Base';
-import { Company, Person, SourceMaterial } from '.';
-import { CREDIT_TYPES, MODELS } from '../utils/constants';
+import { getDuplicateEntityIndices } from '../lib/get-duplicate-indices.js';
+import Base from './Base.js';
+import { Company, Person, SourceMaterial } from './index.js';
+import { CREDIT_TYPES, MODELS } from '../utils/constants.js';
 
 export default class WritingCredit extends Base {
 

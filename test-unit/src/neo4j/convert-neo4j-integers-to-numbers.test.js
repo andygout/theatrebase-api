@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import neo4j from 'neo4j-driver';
 
-import { convertNeo4jIntegersToNumbers } from '../../../src/neo4j/convert-neo4j-integers-to-numbers';
+import { convertNeo4jIntegersToNumbers } from '../../../src/neo4j/convert-neo4j-integers-to-numbers.js';
 
 describe('Convert Neo4j Integers To Numbers module', () => {
 

@@ -1,4 +1,4 @@
-import { convertNeo4jIntegersToNumbers } from './convert-neo4j-integers-to-numbers';
+import { convertNeo4jIntegersToNumbers } from './convert-neo4j-integers-to-numbers.js';
 
 export const convertNeo4jRecordsToObjects = response => {
 

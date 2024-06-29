@@ -1,5 +1,5 @@
-import { getEditQuery } from '.';
-import { ACTIONS } from '../../../utils/constants';
+import { getEditQuery } from './index.js';
+import { ACTIONS } from '../../../utils/constants.js';
 
 const getCreateUpdateQuery = action => {
 

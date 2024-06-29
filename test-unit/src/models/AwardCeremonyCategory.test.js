@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { assert, spy } from 'sinon';
 
-import { AwardCeremonyCategory, Nomination } from '../../../src/models';
+import { AwardCeremonyCategory, Nomination } from '../../../src/models/index.js';
 
 describe('AwardCeremonyCategory model', () => {
 

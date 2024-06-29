@@ -3,8 +3,8 @@ import { expect } from 'chai';
 import {
 	getDuplicateEntities,
 	isEntityInArray
-} from '../../../src/lib/get-duplicate-entity-info';
-import applyModelGetter from '../../test-helpers/apply-model-getter';
+} from '../../../src/lib/get-duplicate-entity-info.js';
+import applyModelGetter from '../../test-helpers/apply-model-getter.js';
 
 describe('Get Duplicate Entity Info module', () => {
 

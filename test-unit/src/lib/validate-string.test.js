@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { validateString } from '../../../src/lib/validate-string';
+import { validateString } from '../../../src/lib/validate-string.js';
 
 const STRING_MAX_LENGTH = 1000;
 const MAX_LENGTH_STRING = 'a'.repeat(STRING_MAX_LENGTH);

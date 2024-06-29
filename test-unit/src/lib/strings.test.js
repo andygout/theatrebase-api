@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { getTrimmedOrEmptyString } from '../../../src/lib/strings';
+import { getTrimmedOrEmptyString } from '../../../src/lib/strings.js';
 
 describe('Strings module', () => {
 

@@ -1,7 +1,7 @@
-import { prepareAsParams } from '../lib/prepare-as-params';
-import MaterialBase from './MaterialBase';
-import { validationQueries } from '../neo4j/cypher-queries';
-import { neo4jQuery } from '../neo4j/query';
+import { prepareAsParams } from '../lib/prepare-as-params.js';
+import MaterialBase from './MaterialBase.js';
+import { validationQueries } from '../neo4j/cypher-queries/index.js';
+import { neo4jQuery } from '../neo4j/query.js';
 
 export default class OriginalVersionMaterial extends MaterialBase {
 

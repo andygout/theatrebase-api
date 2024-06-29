@@ -1,9 +1,9 @@
-import countNodesWithLabel from './count-nodes-with-label';
-import createNode from './create-node';
-import createRelationship from './create-relationship';
-import deleteRelationship from './delete-relationship';
-import isNodeExistent from './is-node-existent';
-import purgeDatabase from './purge-database';
+import countNodesWithLabel from './count-nodes-with-label.js';
+import createNode from './create-node.js';
+import createRelationship from './create-relationship.js';
+import deleteRelationship from './delete-relationship.js';
+import isNodeExistent from './is-node-existent.js';
+import purgeDatabase from './purge-database.js';
 
 export {
 	countNodesWithLabel,

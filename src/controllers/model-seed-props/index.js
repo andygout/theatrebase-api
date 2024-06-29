@@ -1,7 +1,7 @@
-import awardCeremony from './award-ceremony';
-import material from './material';
-import production from './production';
-import venue from './venue';
+import awardCeremony from './award-ceremony.js';
+import material from './material.js';
+import production from './production.js';
+import venue from './venue.js';
 
 export {
 	awardCeremony,

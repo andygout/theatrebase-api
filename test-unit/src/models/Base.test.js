@@ -1,41 +1,45 @@
 import { expect } from 'chai';
-import { assert, createSandbox, spy } from 'sinon';
+import esmock from 'esmock';
+import { assert, spy, stub } from 'sinon';
 
-import * as stringsModule from '../../../src/lib/strings';
-import * as validateStringModule from '../../../src/lib/validate-string';
-import Base from '../../../src/models/Base';
-import { Nomination, ProductionIdentifier, Review } from '../../../src/models';
-
-let stubs;
-let instance;
+import { Nomination, ProductionIdentifier, Review } from '../../../src/models/index.js';
 
 const STRING_MAX_LENGTH = 1000;
 const ABOVE_MAX_LENGTH_STRING = 'a'.repeat(STRING_MAX_LENGTH + 1);
 
-const sandbox = createSandbox();
-
 describe('Base model', () => {
+
+	let stubs;
 
 	beforeEach(() => {
 
 		stubs = {
-			getTrimmedOrEmptyString:
-				sandbox.stub(stringsModule, 'getTrimmedOrEmptyString').callsFake(arg => arg?.trim() || ''),
-			validateString: sandbox.stub(validateStringModule, 'validateString').returns(undefined)
+			stringsModule: {
+				getTrimmedOrEmptyString: stub().callsFake(arg => arg?.trim() || '')
+			},
+			validateStringModule: {
+				validateString: stub().returns(undefined)
+			}
 		};
 
-		stubs.validateString.withArgs('', { isRequired: true }).returns('Value is too short');
-		stubs.validateString.withArgs(ABOVE_MAX_LENGTH_STRING, { isRequired: false }).returns('Value is too long');
-
-		instance = new Base({ name: 'Foobar' });
-
-	});
-
-	afterEach(() => {
-
-		sandbox.restore();
+		stubs.validateStringModule.validateString
+			.withArgs('', { isRequired: true }).returns('Value is too short');
+		stubs.validateStringModule.validateString
+			.withArgs(ABOVE_MAX_LENGTH_STRING, { isRequired: false }).returns('Value is too long');
 
 	});
+
+	const createSubject = (model = 'Base') =>
+		esmock(
+			`../../../src/models/${model}.js`,
+			{},
+			// globalmocks: mock definitions imported everywhere.
+			// Required for when instances of class extensions of the Base class are tested.
+			{
+				'../../../src/lib/strings.js': stubs.stringsModule,
+				'../../../src/lib/validate-string.js': stubs.validateStringModule
+			}
+		);
 
 	describe('constructor method', () => {
 
@@ -43,9 +47,11 @@ describe('Base model', () => {
 
 			context('model is not exempt', () => {
 
-				it('assigns return value from getTrimmedOrEmptyString called with props value', () => {
+				it('assigns return value from getTrimmedOrEmptyString called with props value', async () => {
 
-					assert.calledOnceWithExactly(stubs.getTrimmedOrEmptyString, 'Foobar');
+					const Base = await createSubject();
+					const instance = new Base({ name: 'Foobar' });
+					assert.calledOnceWithExactly(stubs.stringsModule.getTrimmedOrEmptyString, 'Foobar');
 					expect(instance.name).to.equal('Foobar');
 
 				});
@@ -56,8 +62,9 @@ describe('Base model', () => {
 
 				context('model is Nomination', () => {
 
-					it('does not assign name property', () => {
+					it('does not assign name property', async () => {
 
+						const Nomination = await createSubject('Nomination');
 						const instance = new Nomination({ name: '1' });
 						expect(instance).to.not.have.property('name');
 
@@ -67,8 +74,9 @@ describe('Base model', () => {
 
 				context('model is ProductionIdentifier', () => {
 
-					it('does not assign name property', () => {
+					it('does not assign name property', async () => {
 
+						const ProductionIdentifier = await createSubject('ProductionIdentifier');
 						const instance = new ProductionIdentifier({
 							uuid: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
 							name: '1'
@@ -81,8 +89,9 @@ describe('Base model', () => {
 
 				context('model is Review', () => {
 
-					it('does not assign name property', () => {
+					it('does not assign name property', async () => {
 
+						const Review = await createSubject('Review');
 						const instance = new Review({
 							url: 'https://www.foo.com',
 							name: 'foo'
@@ -101,8 +110,10 @@ describe('Base model', () => {
 
 	describe('validateName method', () => {
 
-		it('will call validateStringForProperty method', () => {
+		it('will call validateStringForProperty method', async () => {
 
+			const Base = await createSubject();
+			const instance = new Base();
 			spy(instance, 'validateStringForProperty');
 			instance.validateName({ isRequired: false });
 			assert.calledOnceWithExactly(
@@ -116,8 +127,10 @@ describe('Base model', () => {
 
 	describe('validateQualifier method', () => {
 
-		it('will call validateStringForProperty method', () => {
+		it('will call validateStringForProperty method', async () => {
 
+			const Base = await createSubject();
+			const instance = new Base();
 			spy(instance, 'validateStringForProperty');
 			instance.validateQualifier();
 			assert.calledOnceWithExactly(
@@ -133,12 +146,14 @@ describe('Base model', () => {
 
 		context('valid data', () => {
 
-			it('will not call addPropertyError method', () => {
+			it('will not call addPropertyError method', async () => {
 
+				const Base = await createSubject();
+				const instance = new Base();
 				spy(instance, 'addPropertyError');
 				instance.validateStringForProperty('name', { isRequired: false });
 				assert.calledOnceWithExactly(
-					stubs.validateString,
+					stubs.validateStringModule.validateString,
 					instance.name, { isRequired: false }
 				);
 				assert.notCalled(instance.addPropertyError);
@@ -149,17 +164,18 @@ describe('Base model', () => {
 
 		context('invalid data', () => {
 
-			it('will call addPropertyError method', () => {
+			it('will call addPropertyError method', async () => {
 
-				instance.name = '';
+				const Base = await createSubject();
+				const instance = new Base({ name: '' });
 				spy(instance, 'addPropertyError');
 				instance.validateStringForProperty('name', { isRequired: true });
 				assert.callOrder(
-					stubs.validateString,
+					stubs.validateStringModule.validateString,
 					instance.addPropertyError
 				);
 				assert.calledOnceWithExactly(
-					stubs.validateString,
+					stubs.validateStringModule.validateString,
 					instance.name, { isRequired: true }
 				);
 				assert.calledOnceWithExactly(
@@ -177,8 +193,10 @@ describe('Base model', () => {
 
 		context('valid data', () => {
 
-			it('will not call addPropertyError method', () => {
+			it('will not call addPropertyError method', async () => {
 
+				const Base = await createSubject();
+				const instance = new Base({ name: 'Foobar' });
 				spy(instance, 'addPropertyError');
 				const opts = { isDuplicate: false };
 				instance.validateUniquenessInGroup(opts);
@@ -192,8 +210,10 @@ describe('Base model', () => {
 
 			context('instance does not have differentiator, characterDifferentiator, qualifier, or group property', () => {
 
-				it('will call addPropertyError method with group context error text for name property only', () => {
+				it('will call addPropertyError method with group context error text for name property only', async () => {
 
+					const Base = await createSubject();
+					const instance = new Base({ name: 'Foobar' });
 					spy(instance, 'addPropertyError');
 					const opts = { isDuplicate: true };
 					instance.validateUniquenessInGroup(opts);
@@ -208,8 +228,10 @@ describe('Base model', () => {
 
 			context('instance has underlyingName property', () => {
 
-				it('will call addPropertyError method with group context error text for name and underlyingName properties', () => {
+				it('will call addPropertyError method with group context error text for name and underlyingName properties', async () => {
 
+					const Base = await createSubject();
+					const instance = new Base({ name: 'Foobar' });
 					instance.underlyingName = '';
 					spy(instance, 'addPropertyError');
 					const opts = { isDuplicate: true };
@@ -230,8 +252,10 @@ describe('Base model', () => {
 
 			context('instance has characterName property', () => {
 
-				it('will call addPropertyError method with group context error text for name and characterName properties', () => {
+				it('will call addPropertyError method with group context error text for name and characterName properties', async () => {
 
+					const Base = await createSubject();
+					const instance = new Base({ name: 'Foobar' });
 					instance.characterName = '';
 					spy(instance, 'addPropertyError');
 					const opts = { isDuplicate: true };
@@ -252,8 +276,10 @@ describe('Base model', () => {
 
 			context('instance has differentiator property', () => {
 
-				it('will call addPropertyError method with group context error text for name and differentiator properties', () => {
+				it('will call addPropertyError method with group context error text for name and differentiator properties', async () => {
 
+					const Base = await createSubject();
+					const instance = new Base({ name: 'Foobar' });
 					instance.differentiator = '';
 					spy(instance, 'addPropertyError');
 					const opts = { isDuplicate: true };
@@ -274,8 +300,10 @@ describe('Base model', () => {
 
 			context('instance has characterDifferentiator property', () => {
 
-				it('will call addPropertyError method with group context error text for name and differentiator properties', () => {
+				it('will call addPropertyError method with group context error text for name and differentiator properties', async () => {
 
+					const Base = await createSubject();
+					const instance = new Base({ name: 'Foobar' });
 					instance.characterDifferentiator = '';
 					spy(instance, 'addPropertyError');
 					const opts = { isDuplicate: true };
@@ -296,8 +324,10 @@ describe('Base model', () => {
 
 			context('instance has qualifier property', () => {
 
-				it('will call addPropertyError method with group context error text for name and qualifier properties', () => {
+				it('will call addPropertyError method with group context error text for name and qualifier properties', async () => {
 
+					const Base = await createSubject();
+					const instance = new Base({ name: 'Foobar' });
 					instance.qualifier = '';
 					spy(instance, 'addPropertyError');
 					const opts = { isDuplicate: true };
@@ -318,8 +348,10 @@ describe('Base model', () => {
 
 			context('instance has group property', () => {
 
-				it('will call addPropertyError method with group context error text for name property', () => {
+				it('will call addPropertyError method with group context error text for name property', async () => {
 
+					const Base = await createSubject();
+					const instance = new Base({ name: 'Foobar' });
 					spy(instance, 'addPropertyError');
 					const opts = { isDuplicate: true };
 					instance.validateUniquenessInGroup(opts);
@@ -334,11 +366,14 @@ describe('Base model', () => {
 
 			context('instance has differentiator, characterDifferentiator, qualifier, and group property', () => {
 
-				it('will call addPropertyError method with group context error text for name, differentiator, and qualifier properties', () => {
+				it('will call addPropertyError method with group context error text for name, differentiator, and qualifier properties', async () => {
 
+					const Base = await createSubject();
+					const instance = new Base({ name: 'Foobar' });
 					instance.differentiator = '';
 					instance.characterDifferentiator = '';
 					instance.qualifier = '';
+					instance.group = '';
 					spy(instance, 'addPropertyError');
 					const opts = { isDuplicate: true };
 					instance.validateUniquenessInGroup(opts);
@@ -366,8 +401,10 @@ describe('Base model', () => {
 
 			context('instance has uuid property which is specified via opts argument as requiring an error assigned to it', () => {
 
-				it('will call addPropertyError method with group context error text for uuid property only (i.e. not name property)', () => {
+				it('will call addPropertyError method with group context error text for uuid property only (i.e. not name property)', async () => {
 
+					const Base = await createSubject();
+					const instance = new Base({ name: 'Foobar' });
 					instance.uuid = '';
 					spy(instance, 'addPropertyError');
 					const opts = { isDuplicate: true, properties: new Set(['uuid']) };
@@ -387,8 +424,10 @@ describe('Base model', () => {
 
 	describe('validateNamePresenceIfNamedChildren method', () => {
 
-		it('will call validatePropertyPresenceIfNamedChildren', () => {
+		it('will call validatePropertyPresenceIfNamedChildren', async () => {
 
+			const Base = await createSubject();
+			const instance = new Base({ name: 'Foobar' });
 			spy(instance, 'validatePropertyPresenceIfNamedChildren');
 			instance.validateNamePresenceIfNamedChildren([{ name: 'Foo' }, { name: 'Bar' }]);
 			assert.calledOnceWithExactly(
@@ -406,8 +445,10 @@ describe('Base model', () => {
 
 			context('instance does not have name nor any children with names', () => {
 
-				it('will not add properties to errors property', () => {
+				it('will not add properties to errors property', async () => {
 
+					const Base = await createSubject();
+					const instance = new Base({ name: '' });
 					instance.name = '';
 					spy(instance, 'addPropertyError');
 					instance.validatePropertyPresenceIfNamedChildren('name', [{ name: '' }]);
@@ -419,8 +460,10 @@ describe('Base model', () => {
 
 			context('instance has a name and no children with names', () => {
 
-				it('will not add properties to errors property', () => {
+				it('will not add properties to errors property', async () => {
 
+					const Base = await createSubject();
+					const instance = new Base({ name: 'Foobar' });
 					spy(instance, 'addPropertyError');
 					instance.validatePropertyPresenceIfNamedChildren('name', [{ name: '' }]);
 					assert.notCalled(instance.addPropertyError);
@@ -430,8 +473,10 @@ describe('Base model', () => {
 
 			context('instance has a name and children with names', () => {
 
-				it('will not add properties to errors property', () => {
+				it('will not add properties to errors property', async () => {
 
+					const Base = await createSubject();
+					const instance = new Base({ name: 'Foobar' });
 					spy(instance, 'addPropertyError');
 					instance.validatePropertyPresenceIfNamedChildren('name', [{ name: 'Bar' }]);
 					assert.notCalled(instance.addPropertyError);
@@ -444,8 +489,10 @@ describe('Base model', () => {
 
 		context('invalid data', () => {
 
-			it('adds properties to errors property', () => {
+			it('adds properties to errors property', async () => {
 
+				const Base = await createSubject();
+				const instance = new Base({ name: '' });
 				instance.name = '';
 				spy(instance, 'addPropertyError');
 				instance.validatePropertyPresenceIfNamedChildren('name', [{ name: 'Bar' }]);
@@ -466,6 +513,8 @@ describe('Base model', () => {
 
 			it('merges error into existing array', async () => {
 
+				const Base = await createSubject();
+				const instance = new Base({ name: 'Foobar' });
 				instance.errors.name = ['Value is too long'];
 				instance.addPropertyError('name', 'Name has been duplicated in this group');
 				expect(instance.errors)
@@ -481,6 +530,8 @@ describe('Base model', () => {
 
 			it('adds new property to errors object and assigns a value of an array containing error text', async () => {
 
+				const Base = await createSubject();
+				const instance = new Base({ name: 'Foobar' });
 				instance.errors.name = ['Name has been duplicated in this group'];
 				instance.addPropertyError('characterName', 'Value is too long');
 				expect(instance.errors)

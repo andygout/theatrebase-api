@@ -1,5 +1,5 @@
-import FestivalBase from './FestivalBase';
-import { FestivalSeries } from '.';
+import FestivalBase from './FestivalBase.js';
+import { FestivalSeries } from './index.js';
 
 export default class Festival extends FestivalBase {
 

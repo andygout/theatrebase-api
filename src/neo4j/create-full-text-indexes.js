@@ -1,7 +1,7 @@
 import directly from 'directly';
 
-import { neo4jQuery } from './query';
-import { MODEL_TO_NODE_LABEL_MAP } from '../utils/constants';
+import { neo4jQuery } from './query.js';
+import { MODEL_TO_NODE_LABEL_MAP } from '../utils/constants.js';
 
 const NAMES_FULL_TEXT_INDEX_NAME = 'names';
 

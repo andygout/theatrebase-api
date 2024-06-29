@@ -1,11 +1,11 @@
-import getAwardContextualDuplicateRecordCheckQuery from './award-contextual-duplicate-record-check';
-import getDuplicateRecordCheckQuery from './duplicate-record-check';
-import getExistenceCheckQuery from './existence-check';
-import getOriginalVersionMaterialChecksQuery from './original-version-material-checks';
-import getSourceMaterialChecksQuery from './source-material-checks';
-import getSubMaterialChecksQuery from './sub-material-checks';
-import getSubProductionChecksQuery from './sub-production-checks';
-import getSubVenueChecksQuery from './sub-venue-checks';
+import getAwardContextualDuplicateRecordCheckQuery from './award-contextual-duplicate-record-check.js';
+import getDuplicateRecordCheckQuery from './duplicate-record-check.js';
+import getExistenceCheckQuery from './existence-check.js';
+import getOriginalVersionMaterialChecksQuery from './original-version-material-checks.js';
+import getSourceMaterialChecksQuery from './source-material-checks.js';
+import getSubMaterialChecksQuery from './sub-material-checks.js';
+import getSubProductionChecksQuery from './sub-production-checks.js';
+import getSubVenueChecksQuery from './sub-venue-checks.js';
 
 export {
 	getAwardContextualDuplicateRecordCheckQuery,

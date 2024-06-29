@@ -1,13 +1,13 @@
-import './dotenv';
+import './dotenv.js';
 
 import http from 'node:http';
 
 import express from 'express';
 import logger from 'morgan';
 
-import { accessControlSetter, errorHandler } from './middleware';
-import { getDriver as getNeo4jDriver } from './neo4j/get-driver';
-import router from './router';
+import { accessControlSetter, errorHandler } from './middleware/index.js';
+import { getDriver as getNeo4jDriver } from './neo4j/get-driver.js';
+import router from './router.js';
 
 const app = express();
 

@@ -1,7 +1,6 @@
 {
   "reporter-option": "maxDiffSize=8192",
   "require": [
-    "@babel/register",
     "test-e2e/mocha.env.js",
     "test-e2e/setup.js",
     "test-e2e/teardown.js"

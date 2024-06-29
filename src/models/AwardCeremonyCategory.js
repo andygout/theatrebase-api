@@ -1,6 +1,6 @@
-import Base from './Base';
-import { Nomination } from '.';
-import { MODELS } from '../utils/constants';
+import Base from './Base.js';
+import { Nomination } from './index.js';
+import { MODELS } from '../utils/constants.js';
 
 export default class AwardCeremonyCategory extends Base {
 

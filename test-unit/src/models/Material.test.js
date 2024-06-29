@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import proxyquire from 'proxyquire';
+import esmock from 'esmock';
 import { assert, createStubInstance, spy, stub } from 'sinon';
 
-import { CharacterGroup, MaterialBase, OriginalVersionMaterial, SubMaterial, WritingCredit } from '../../../src/models';
+import { CharacterGroup, MaterialBase, OriginalVersionMaterial, SubMaterial, WritingCredit } from '../../../src/models/index.js';
 
 describe('Material model', () => {
 
@@ -58,16 +58,16 @@ describe('Material model', () => {
 	});
 
 	const createSubject = () =>
-		proxyquire('../../../src/models/Material', {
-			'../lib/get-duplicate-indices': stubs.getDuplicateIndicesModule,
-			'../lib/is-valid-year': stubs.isValidYearModule,
-			'../lib/strings': stubs.stringsModule,
-			'.': stubs.models
-		}).default;
+		esmock('../../../src/models/Material.js', {
+			'../../../src/lib/get-duplicate-indices.js': stubs.getDuplicateIndicesModule,
+			'../../../src/lib/is-valid-year.js': stubs.isValidYearModule,
+			'../../../src/lib/strings.js': stubs.stringsModule,
+			'../../../src/models/index.js': stubs.models
+		});
 
-	const createInstance = props => {
+	const createInstance = async props => {
 
-		const Material = createSubject();
+		const Material = await createSubject();
 
 		return new Material(props);
 
@@ -75,18 +75,18 @@ describe('Material model', () => {
 
 	describe('constructor method', () => {
 
-		it('calls getTrimmedOrEmptyString to get values to assign to properties', () => {
+		it('calls getTrimmedOrEmptyString to get values to assign to properties', async () => {
 
-			createInstance();
+			await createInstance();
 			expect(stubs.stringsModule.getTrimmedOrEmptyString.callCount).to.equal(3);
 
 		});
 
 		describe('subtitle property', () => {
 
-			it('assigns return value from getTrimmedOrEmptyString called with props value', () => {
+			it('assigns return value from getTrimmedOrEmptyString called with props value', async () => {
 
-				const instance = createInstance({ subtitle: 'Prince of Denmark' });
+				const instance = await createInstance({ subtitle: 'Prince of Denmark' });
 				assert.calledWithExactly(stubs.stringsModule.getTrimmedOrEmptyString.firstCall, 'Prince of Denmark');
 				expect(instance.subtitle).to.equal('Prince of Denmark');
 
@@ -96,9 +96,9 @@ describe('Material model', () => {
 
 		describe('format property', () => {
 
-			it('assigns return value from getTrimmedOrEmptyString called with props value', () => {
+			it('assigns return value from getTrimmedOrEmptyString called with props value', async () => {
 
-				const instance = createInstance({ format: 'play' });
+				const instance = await createInstance({ format: 'play' });
 				assert.calledWithExactly(stubs.stringsModule.getTrimmedOrEmptyString.secondCall, 'play');
 				expect(instance.format).to.equal('play');
 
@@ -110,9 +110,9 @@ describe('Material model', () => {
 
 			context('value cannot be parsed as integer', () => {
 
-				it('assigns return value from getTrimmedOrEmptyString called with props value', () => {
+				it('assigns return value from getTrimmedOrEmptyString called with props value', async () => {
 
-					const instance = createInstance({ year: 'Nineteen Fifty-Nine' });
+					const instance = await createInstance({ year: 'Nineteen Fifty-Nine' });
 					assert.calledWithExactly(stubs.stringsModule.getTrimmedOrEmptyString.thirdCall, 'Nineteen Fifty-Nine');
 					expect(instance.year).to.equal('Nineteen Fifty-Nine');
 
@@ -122,23 +122,23 @@ describe('Material model', () => {
 
 			context('value can be parsed as integer', () => {
 
-				it('assigns value converted to integer if included in props and value can be parsed as integer', () => {
+				it('assigns value converted to integer if included in props and value can be parsed as integer', async () => {
 
-					const instance = createInstance({ year: '1959' });
+					const instance = await createInstance({ year: '1959' });
 					expect(instance.year).to.equal(1959);
 
 				});
 
-				it('assigns value with flanking whitespace converted to integer if included in props and value can be parsed as integer', () => {
+				it('assigns value with flanking whitespace converted to integer if included in props and value can be parsed as integer', async () => {
 
-					const instance = createInstance({ year: ' 1959 ' });
+					const instance = await createInstance({ year: ' 1959 ' });
 					expect(instance.year).to.equal(1959);
 
 				});
 
-				it('assigns value if included in props and is an integer', () => {
+				it('assigns value if included in props and is an integer', async () => {
 
-					const instance = createInstance({ year: 1959 });
+					const instance = await createInstance({ year: 1959 });
 					expect(instance.year).to.equal(1959);
 
 				});
@@ -149,9 +149,9 @@ describe('Material model', () => {
 
 		describe('originalVersionMaterial property', () => {
 
-			it('assigns instance if absent from props', () => {
+			it('assigns instance if absent from props', async () => {
 
-				const instance = createInstance({
+				const instance = await createInstance({
 					name: 'The Seagull',
 					differentiator: '2'
 				});
@@ -159,9 +159,9 @@ describe('Material model', () => {
 
 			});
 
-			it('assigns instance if included in props', () => {
+			it('assigns instance if included in props', async () => {
 
-				const instance = createInstance({
+				const instance = await createInstance({
 					name: 'The Seagull',
 					differentiator: '2',
 					originalVersionMaterial: {
@@ -177,14 +177,14 @@ describe('Material model', () => {
 
 		describe('writingCredits property', () => {
 
-			it('assigns empty array if absent from props', () => {
+			it('assigns empty array if absent from props', async () => {
 
-				const instance = createInstance({ name: 'The Tragedy of Hamlet' });
+				const instance = await createInstance({ name: 'The Tragedy of Hamlet' });
 				expect(instance.writingCredits).to.deep.equal([]);
 
 			});
 
-			it('assigns array of writingCredits if included in props, retaining those with empty or whitespace-only string names', () => {
+			it('assigns array of writingCredits if included in props, retaining those with empty or whitespace-only string names', async () => {
 
 				const props = {
 					name: 'The Tragedy of Hamlet',
@@ -200,7 +200,7 @@ describe('Material model', () => {
 						}
 					]
 				};
-				const instance = createInstance(props);
+				const instance = await createInstance(props);
 				expect(instance.writingCredits.length).to.equal(3);
 				expect(instance.writingCredits[0] instanceof WritingCredit).to.be.true;
 				expect(instance.writingCredits[1] instanceof WritingCredit).to.be.true;
@@ -212,14 +212,14 @@ describe('Material model', () => {
 
 		describe('subMaterials property', () => {
 
-			it('assigns empty array if absent from props', () => {
+			it('assigns empty array if absent from props', async () => {
 
-				const instance = createInstance({ name: 'The Coast of Utopia' });
+				const instance = await createInstance({ name: 'The Coast of Utopia' });
 				expect(instance.subMaterials).to.deep.equal([]);
 
 			});
 
-			it('assigns array of subMaterials if included in props, retaining those with empty or whitespace-only string names', () => {
+			it('assigns array of subMaterials if included in props, retaining those with empty or whitespace-only string names', async () => {
 
 				const props = {
 					name: 'The Coast of Utopia',
@@ -235,7 +235,7 @@ describe('Material model', () => {
 						}
 					]
 				};
-				const instance = createInstance(props);
+				const instance = await createInstance(props);
 				expect(instance.subMaterials.length).to.equal(3);
 				expect(instance.subMaterials[0] instanceof SubMaterial).to.be.true;
 				expect(instance.subMaterials[1] instanceof SubMaterial).to.be.true;
@@ -247,14 +247,14 @@ describe('Material model', () => {
 
 		describe('characterGroups property', () => {
 
-			it('assigns empty array if absent from props', () => {
+			it('assigns empty array if absent from props', async () => {
 
-				const instance = createInstance({ name: 'The Tragedy of Hamlet' });
+				const instance = await createInstance({ name: 'The Tragedy of Hamlet' });
 				expect(instance.characterGroups).to.deep.equal([]);
 
 			});
 
-			it('assigns array of characterGroups if included in props, retaining those with empty or whitespace-only string names', () => {
+			it('assigns array of characterGroups if included in props, retaining those with empty or whitespace-only string names', async () => {
 
 				const props = {
 					name: 'The Tragedy of Hamlet',
@@ -270,7 +270,7 @@ describe('Material model', () => {
 						}
 					]
 				};
-				const instance = createInstance(props);
+				const instance = await createInstance(props);
 				expect(instance.characterGroups.length).to.equal(3);
 				expect(instance.characterGroups[0] instanceof CharacterGroup).to.be.true;
 				expect(instance.characterGroups[1] instanceof CharacterGroup).to.be.true;
@@ -284,7 +284,7 @@ describe('Material model', () => {
 
 	describe('runInputValidations method', () => {
 
-		it('calls instance\'s validate methods and associated models\' validate methods', () => {
+		it('calls instance\'s validate methods and associated models\' validate methods', async () => {
 
 			const props = {
 				name: 'The Tragedy of Hamlet',
@@ -306,7 +306,7 @@ describe('Material model', () => {
 					}
 				]
 			};
-			const instance = createInstance(props);
+			const instance = await createInstance(props);
 			spy(instance, 'validateName');
 			spy(instance, 'validateDifferentiator');
 			spy(instance, 'validateSubtitle');
@@ -373,9 +373,9 @@ describe('Material model', () => {
 
 	describe('validateFormat method', () => {
 
-		it('will call validateStringForProperty method', () => {
+		it('will call validateStringForProperty method', async () => {
 
-			const instance = createInstance({ name: 'The Tragedy of Hamlet', format: 'play' });
+			const instance = await createInstance({ name: 'The Tragedy of Hamlet', format: 'play' });
 			spy(instance, 'validateStringForProperty');
 			instance.validateFormat({ isRequired: false });
 			assert.calledOnceWithExactly(
@@ -391,9 +391,9 @@ describe('Material model', () => {
 
 		context('year value equates to false', () => {
 
-			it('will not call isValidYear function or addPropertyError method', () => {
+			it('will not call isValidYear function or addPropertyError method', async () => {
 
-				const instance = createInstance({ name: 'The Caretaker', year: '' });
+				const instance = await createInstance({ name: 'The Caretaker', year: '' });
 				spy(instance, 'addPropertyError');
 				instance.validateYear();
 				assert.notCalled(stubs.isValidYearModule.isValidYear);
@@ -405,9 +405,9 @@ describe('Material model', () => {
 
 		context('year value is not a valid year', () => {
 
-			it('will call isValidYear function and addPropertyError method', () => {
+			it('will call isValidYear function and addPropertyError method', async () => {
 
-				const instance = createInstance({ name: 'The Caretaker', year: 'Nineteen Fifty-Nine' });
+				const instance = await createInstance({ name: 'The Caretaker', year: 'Nineteen Fifty-Nine' });
 				spy(instance, 'addPropertyError');
 				instance.validateYear();
 				assert.calledOnceWithExactly(stubs.isValidYearModule.isValidYear, 'Nineteen Fifty-Nine');
@@ -422,9 +422,9 @@ describe('Material model', () => {
 
 		context('year value is a valid year', () => {
 
-			it('will call isValidYear function but not addPropertyError method', () => {
+			it('will call isValidYear function but not addPropertyError method', async () => {
 
-				const instance = createInstance({ name: 'The Caretaker', year: 1959 });
+				const instance = await createInstance({ name: 'The Caretaker', year: 1959 });
 				spy(instance, 'addPropertyError');
 				instance.validateYear();
 				assert.calledOnceWithExactly(stubs.isValidYearModule.isValidYear, 1959);
@@ -458,7 +458,7 @@ describe('Material model', () => {
 					}
 				]
 			};
-			const instance = createInstance(props);
+			const instance = await createInstance(props);
 			stub(instance, 'validateUniquenessInDatabase');
 			await instance.runDatabaseValidations();
 			assert.calledOnceWithExactly(instance.validateUniquenessInDatabase);
